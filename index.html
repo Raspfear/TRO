@@ -6,293 +6,176 @@
 <title>T.R.O.A.T. Training Repetitive Oral Attention Techniques</title>
 <style>
   :root {
-    --bg: #fff0f5;   /* very light pink */
-    --pink1: #ffb6c1;/* soft pink */
-    --pink2: #ff69b4;/* hot pink */
+    --bg: #fff0f5;
+    --pink1: #ffb6c1;
+    --pink2: #ff69b4;
     --accent: #880044;
   }
-  html, body {
-    margin: 0; height: 100%;
-    background: var(--bg);
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    color: var(--accent);
-    overflow: hidden;
-    user-select: none; -webkit-user-select: none;
-  }
-
-  main {
-    height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    text-align: center; padding: 24px; box-sizing: border-box;
-  }
-
-  /* First Enter Screen (White, Minimalist) */
-  #enter-screen {
-    position: fixed; inset: 0; background: white;
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column; z-index: 50;
-    opacity: 1; transition: opacity 3s;
-  }
-  #enter-btn {
-    background: black; color: white;
-    border: none; font-size: 18px; padding: 12px 22px;
-    cursor: pointer; border-radius: 0; font-weight: bold;
-  }
-  #enter-screen.fade-out { opacity: 0; pointer-events: none; }
-
-  /* Intro Screen */
-  #start-screen {
-    position: fixed; inset: 0; background: var(--bg);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    z-index: 40; opacity: 0; transition: opacity 3s;
-  }
-  #start-screen.show { opacity: 1; }
-  #start-screen button {
-    margin-top: 16px; padding: 12px 20px; border: none;
-    background: var(--pink2); color: #fff; font-size: 16px; border-radius: 10px; cursor: pointer;
-  }
-
-  /* Begging screen */
-  #begging-screen {
-    position: fixed; inset: 0; display: none; opacity: 0;
-    background: var(--bg); z-index: 30;
-    flex-direction: column; align-items: center; justify-content: center; text-align: center;
-    transition: opacity .4s ease;
-  }
-  #begging-screen.show { display: flex; opacity: 1; }
-  #begging-text { font-size: 1.25rem; margin-bottom: 12px; }
-
-  /* Gentle Break */
-  #break-screen {
-    position: fixed; inset: 0; display: none; background: var(--bg); z-index: 30;
-    flex-direction: column; align-items: center; justify-content: center; text-align: center;
-  }
-
-  /* Cum screen */
-  #cum-screen {
-    position: fixed; inset: 0; display: none; background: var(--bg); z-index: 35;
-    flex-direction: column; align-items: center; justify-content: center; text-align: center;
-  }
-
-  /* Overlay popups */
-  #overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.4);
-    opacity: 0; pointer-events: none; transition: opacity .4s; z-index: 10;
-  }
-  #overlay.show { opacity: 1; pointer-events: auto; }
-  .panel {
-    position: fixed; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(.95);
-    background: #fff; padding: 18px 22px; border-radius: 12px; border: 2px solid var(--pink2);
-    box-shadow: 0 8px 26px rgba(0,0,0,.15); color: var(--accent); text-align: center;
-    opacity: 0; z-index: 11; transition: opacity .4s ease, transform .4s ease;
-  }
-  .panel.show { opacity: 1; transform: translate(-50%,-50%) scale(1); }
-
-  /* Scene transition (blank fade) */
-  #transition-screen {
-    position: fixed; inset: 0; background: var(--bg); opacity: 0; z-index: 20; pointer-events: none;
-    transition: opacity .5s; display: flex; align-items: center; justify-content: center;
-  }
-  #transition-screen.show { opacity: 1; }
-
-  /* Shared frame */
-  .component-frame {
-    width: 80%; max-width: 720px;
-    border: 2px solid var(--pink1);
-    border-radius: 12px;
-    background: var(--bg);
-    margin: 12px auto;
-    position: relative;
-  }
-
-  /* Meters */
-  .meter { height: 20px; overflow: hidden; }
-  .meter-fill {
-    height: 100%; width: 0%;
-    background: var(--pink1); border-right: 2px solid var(--pink2);
-    transition: width .08s linear, background .1s;
-  }
-  .meter-label {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 12px;
+  body { margin:0; background:var(--bg); font-family:system-ui,sans-serif; color:var(--accent); }
+  .screen { position:fixed; inset:0; display:none; flex-direction:column; align-items:center; justify-content:flex-start; text-align:center; padding:20px; transition:opacity 1s; }
+  .screen.show { display:flex; }
+  #enter-screen { background:white; z-index:50; align-items:center; justify-content:center; text-align:center; opacity:1; transition:opacity 3s; }
+  #enterBtn { background:black; color:white; border:none; font-size:18px; padding:12px 22px; cursor:pointer; font-weight:bold; }
+  #enter-screen.fade-out { opacity:0; pointer-events:none; }
+  #start-screen { background:var(--bg); z-index:40; display:none; }
+  #begging-screen { background:#ffe6f2; z-index:30; opacity:0; }
+  #begging-screen.show { opacity:1; }
+  .component-frame { width:80%; max-width:400px; border:2px solid var(--pink1); border-radius:12px; background:var(--bg); margin:12px auto; opacity:0; transition:opacity 1s; }
+  .component-frame.show { opacity:1; }
+  .meter { height:20px; position:relative; }
+  .meter-fill { height:100%; width:0%; background:var(--pink1); border-right:2px solid var(--pink2); transition:width .1s linear; }
+  .meter-label { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:12px; font-weight:bold; color:var(--pink2); pointer-events:none; }
+  .waveform { height:30px; display:block; }
+  /* Feminine button styling */
+  .fem-btn {
+    margin-top: 20px;
+    background: var(--pink2);
+    color: white;
+    border: none;
+    font-size: 1rem;
+    padding: 12px 28px;
+    border-radius: 24px;
     font-weight: bold;
-    color: var(--pink2);
-    pointer-events: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: background 0.3s, transform 0.2s;
   }
-
-  /* Waveforms */
-  .waveform { height: 30px; display: block; }
-
-  /* Fade-in/out helper */
-  .fade { opacity: 0; transition: opacity 0.4s ease; }
-  .fade.show { opacity: 1; }
-
-  /* Hearts splash */
-  #hearts-container {
-    position: absolute; top: 50%; left: 50%; pointer-events: none; z-index: 50;
-  }
-  .heart {
-    position: absolute; font-size: 16px; color: var(--pink2); opacity: 0;
-    animation: floatUp .6s ease forwards;
-  }
-  @keyframes floatUp {
-    0% { transform: translate(-50%, 0) scale(.8) rotate(0deg); opacity: 0; }
-    30%{ opacity:1; }
-    100%{ transform: translate(-50%, -50px) scale(1) rotate(8deg); opacity:0; }
+  .fem-btn:hover {
+    background: #e0559a;
+    transform: scale(1.05);
   }
 </style>
 </head>
 <body>
 
+<!-- AUDIO -->
+<audio id="enterClick" src="audio/enterClick.mp3" preload="auto"></audio>
+<audio id="startSound1" src="audio/Start1.mp3" preload="auto"></audio>
+<audio id="startSound2" src="audio/Start2.mp3" preload="auto"></audio>
+<audio id="startSound3" src="audio/Start3.mp3" preload="auto"></audio>
+<audio id="startSound4" src="audio/Start4.mp3" preload="auto"></audio>
+<audio id="startSound5" src="audio/Start5.mp3" preload="auto"></audio>
+
 <!-- ENTER SCREEN -->
-<div id="enter-screen">
-  <button id="enter-btn">ENTER</button>
-</div>
-<!-- INTRO SCREEN -->
-<div id="start-screen">
-  <h1><b>Ã°Å¸Â©Â· T.R.O.A.T. Ã°Å¸Â©Â·</b></h1>
-  <p><b>Training Repetitive Oral Attention Techniques</b></p>
-  <button id="beginBtn">Begin Training</button>
+<div id="enter-screen" class="screen show">
+  <button id="enterBtn">ENTER</button>
 </div>
 
-<!-- Begging Screen -->
-<div id="begging-screen">
-  <div id="begging-text"></div>
+<!-- START SCREEN -->
+<div id="start-screen" class="screen">
+  <main style="padding:20px; width:100%; max-width:720px; margin:0 auto; text-align:center;">
+    <h1 style="margin-top:20px;"><b>🩷 T.R.O.A.T. 🩷</b></h1>
+    <p style="font-weight:bold;">Training Repetitive Oral Attention Techniques</p>
+    <button id="begin-btn" class="fem-btn">Begin Training</button>
+  </main>
 </div>
 
-<!-- Break Screen -->
-<div id="break-screen">
-  <h2>Gentle Break</h2>
-  <p>Take a moment.<br>You did so well.<br>Breathe and get ready for what's coming...</p>
-</div>
-
-<!-- Cum Scene -->
-<div id="cum-screen">
-  <h2>Good Girl...</h2>
-  <div id="hearts-container"></div>
-</div>
-
-<!-- Overlay / Popup -->
-<div id="overlay"></div>
-<div id="popup" class="panel"></div>
-
-<!-- Transition -->
-<div id="transition-screen"></div>
-
-<!-- Main Scene -->
-<main>
-  <div class="card">
-    <h2 id="sceneTitle"></h2>
-    <p id="line1"></p><p id="line2"></p><p id="line3"></p>
+<!-- BEGGING SCREEN -->
+<div id="begging-screen" class="screen">
+  <div id="begging-text" style="margin:20px;"></div>
+  <canvas id="waveform" width="400" height="30" class="component-frame"></canvas>
+  <div class="meter component-frame">
+    <div class="meter-fill" id="begFill"></div>
+    <div class="meter-label" id="begLabel">0%</div>
   </div>
-</main>
+</div>
 
-<!-- Sounds -->
-<audio id="chime"   src="audio/Ding01.mp3" preload="auto"></audio>
-<audio id="popSound" src="audio/pop01.mp3" preload="auto"></audio>
-<audio id="enterSound" src="audio/enterClick.mp3" preload="auto"></audio>
 <script>
 /* --------------------------
-   Content
+   Arrays
 --------------------------- */
-const beggingScenes = [
-  "Welcome.<br>You are here to learn discipline, control, and devotion.<br>This training will teach you to serve with your mouth, to beg for every inch, and to please every cock put in front of you.<br><br><em>Are you ready to serve?</em>",
-  "You begged well.<br>What do you want?<br><br><em>Say 'cock' to continue.</em>",
-  "This is your first challenge.<br>Beg to taste it.<br>Beg to worship it.<br><br><em>Say 'please' to continue.</em>"
+var readyClips = [
+  "audio/ReadyToServe1.mp3",
+  "audio/ReadyToServe2.mp3",
+  "audio/ReadyToServe3.mp3"
 ];
-
-const begForCumScene =
-  "Beg for his release.<br>Tell him how much you want it.<br><br><em>Say 'please' to continue.</em>";
-
-const cumEndings = [
-  "Good Girl, he cums all over your face!",
-  "Good Girl, he shoots down your throat!",
-  "Good Girl, he covers your breasts with his release!",
-  "Good Girl, he spills hot cum across your tongue!",
-  "Good Girl, he empties himself into your mouth!",
-  "Good Girl, he coats your lips and chin!",
-  "Good Girl, he paints your cheeks with every drop!",
-  "Good Girl, he fills your mouth until it overflows!",
-  "Good Girl, warm release drips down your body!",
-  "Good Girl, he lets it all out just for you!"
-];
-
-const scenes = [
-  { title: "Cock_1 - Gentle Tip Teasing",   lines: ["Kiss the tip.","Gentle teasing, don't be greedy.","Show him how much you want it!"], goal: 100 },
-  { title: "Cock_1 - Gentle Shaft Teasing", lines: ["Slowly lick the shaft.","Up and down, savor every inch.","Don't rush it, make it count."], goal: 100 },
-  { title: "Cock_1 - Gentle Ball Teasing",  lines: ["Caress him gently.","Tease every part slowly.","Make him feel worshipped."], goal: 100 },
-  { title: "Cock_1 - Gentle Break",         lines: [], goal: 100 }, 
-  { title: "Cock_1 - Eager Shaft Teasing",  lines: ["Lick faster now.","Be eager, show enthusiasm.","You're getting him so close..."], goal: 100 },
-  { title: "Cock_1 - Final Climax",         lines: ["Push yourself.","He's almost ready to release.","Work harder, don't stop!"], goal: 200 }
-];
-
-/* --------------------------
-   Refs
---------------------------- */
-const enterScreen  = document.getElementById("enter-screen");
-const enterBtn     = document.getElementById("enter-btn");
-const startScreen  = document.getElementById("start-screen");
-const beginBtn     = document.getElementById("beginBtn");
-
-const beggingScreen = document.getElementById("begging-screen");
-const beggingText   = document.getElementById("begging-text");
-
-const breakScreen   = document.getElementById("break-screen");
-
-const cumScreen     = document.getElementById("cum-screen");
-const heartsContainer = document.getElementById("hearts-container");
-
-const sceneTitle    = document.getElementById("sceneTitle");
-const line1         = document.getElementById("line1");
-const line2         = document.getElementById("line2");
-const line3         = document.getElementById("line3");
-
-const overlay       = document.getElementById("overlay");
-const popup         = document.getElementById("popup");
-const transitionScreen = document.getElementById("transition-screen");
-
-/* Sounds */
-const chime         = document.getElementById("chime");
-const popSound      = document.getElementById("popSound");
-const enterSound    = document.getElementById("enterSound");
 
 /* --------------------------
    State
 --------------------------- */
-let audioCtx, analyser, micSource, dataArray;
-let running = false;
-let meterValue = 0;
-let currentSceneIndex = 0;
-let beggingIndex = 0;
-let mode = "idle"; // beg, tease, break, begCum, cum
-let wavePhase = 0;
-
-let begFill, begLabel, breakFill, breakLabel, cumFill, cumLabel, fillEl, fillLabel;
-let begCanvas, begCtx, mainCanvas, mainCtx;
+var meterValue = 0;
+var running = false;
+var audioCtx, analyser, micSource, dataArray;
+var begFill, begLabel, begCtx;
 
 /* --------------------------
-   Helpers
+   Elements
 --------------------------- */
-function showPopup(msg, cb){
-  overlay.classList.add("show");
-  popup.innerHTML = msg;
-  popup.classList.add("show");
-  setTimeout(() => {
-    popup.classList.remove("show");
-    overlay.classList.remove("show");
-    if (cb) cb();
-  }, 5000);
-}
+const enterScreen = document.getElementById("enter-screen");
+const enterBtn = document.getElementById("enterBtn");
+const startScreen = document.getElementById("start-screen");
+const beginBtn = document.getElementById("begin-btn");
+const beggingScreen = document.getElementById("begging-screen");
+const beggingText = document.getElementById("begging-text");
+const waveform = document.getElementById("waveform");
 
-function transitionTo(cb){
-  transitionScreen.classList.add("show");
+const enterClick = document.getElementById("enterClick");
+const startSounds = [
+  document.getElementById("startSound1"),
+  document.getElementById("startSound2"),
+  document.getElementById("startSound3"),
+  document.getElementById("startSound4"),
+  document.getElementById("startSound5")
+];
+
+/* --------------------------
+   Enter + Intro (canon logic)
+--------------------------- */
+enterBtn.addEventListener("click", () => {
+  try { enterClick.currentTime = 0; enterClick.play().catch(()=>{}); } catch(e){}
+  const intro = startSounds[Math.floor(Math.random() * startSounds.length)];
+  intro.volume = 1.0;
+  intro.play().then(() => { intro.pause(); intro.currentTime = 0; }).catch(()=>{});
+  enterScreen.classList.add("fade-out");
+
   setTimeout(() => {
-    transitionScreen.classList.remove("show");
-    if (cb) cb();
-  }, 2000);
-}
+    startScreen.style.display = "flex";
+    setTimeout(() => {
+      try { intro.currentTime = 0; intro.play().catch(()=>{}); } catch(e){}
+    }, 2000);
+  }, 3000);
+});
+
+/* --------------------------
+   Begin Training → Scene 1
+--------------------------- */
+beginBtn.addEventListener("click", function(){
+  startScreen.style.display = "none";
+  setTimeout(function(){
+    beggingScreen.classList.add("show");
+    beggingText.innerHTML =
+      '<div id="welcomeText" style="opacity:0; transition:opacity 1s; font-size:1.5rem; margin-bottom:16px;">Welcome</div>' +
+      '<div id="readyText" style="opacity:0; transition:opacity 1s; font-size:1.25rem; margin-bottom:20px;"></div>';
+
+    var welcomeEl = document.getElementById("welcomeText");
+    var readyEl = document.getElementById("readyText");
+    setTimeout(function(){ welcomeEl.style.opacity = 1; }, 100);
+
+    var file = readyClips[Math.floor(Math.random() * readyClips.length)];
+    var audioEl = document.createElement("audio");
+    audioEl.src = file;
+    audioEl.autoplay = true;
+    document.body.appendChild(audioEl);
+
+    setTimeout(function(){ welcomeEl.style.opacity = 0; }, 10000);
+
+    audioEl.addEventListener("ended", function(){
+      readyEl.innerHTML = "Are you ready to serve?";
+      readyEl.style.opacity = 1;
+      setTimeout(function(){
+        waveform.classList.add("show");
+        document.querySelector("#begging-screen .meter").classList.add("show");
+        begFill = document.getElementById("begFill");
+        begLabel = document.getElementById("begLabel");
+        begFill.style.width = "0%";
+        begLabel.textContent = "0%";
+        startMic();
+      }, 2000);
+      document.body.removeChild(audioEl);
+    });
+  }, 500);
+});
+
 /* --------------------------
    Mic + Waveform
 --------------------------- */
@@ -313,378 +196,44 @@ function stopMic(){
   running = false;
   try { if (audioCtx) audioCtx.close(); } catch(e){}
   audioCtx = null; analyser = null; micSource = null; dataArray = null;
-  if (begCtx && begCanvas) begCtx.clearRect(0,0,begCanvas.width,begCanvas.height);
-  if (mainCtx && mainCanvas) mainCtx.clearRect(0,0,mainCanvas.width,mainCanvas.height);
+  begCtx = waveform.getContext("2d");
+  begCtx.clearRect(0,0,waveform.width,waveform.height);
 }
 
 function draw(){
   if (!running || !analyser) return;
   analyser.getByteTimeDomainData(dataArray);
-  let sum = 0;
-  for (let i=0;i<dataArray.length;i++){
-    const v = (dataArray[i]-128)/128;
+  var sum = 0;
+  for (var i=0; i<dataArray.length; i++){
+    var v = (dataArray[i]-128)/128;
     sum += v*v;
   }
-  const rms = Math.sqrt(sum / dataArray.length);
+  var rms = Math.sqrt(sum / dataArray.length);
 
-  if (mode !== "break" && mode !== "cum"){
-    if (begCtx && begCanvas) drawWave(begCtx, begCanvas, rms);
-    if (mainCtx && mainCanvas) drawWave(mainCtx, mainCanvas, rms);
+  if (rms > 0.03){
+    meterValue += 4.5;
+    if (meterValue > 100) meterValue = 100;
+  } else {
+    meterValue = Math.max(0, meterValue - 0.3);
   }
 
-  if (mode === "beg" || mode === "begCum"){
-    if (rms > 0.03){
-      meterValue += 1.2;
-      if (meterValue >= 100){
-        if (mode === "beg") completeBeggingStep();
-        else completeBegForCum();
-        return;
-      }
-    } else meterValue = Math.max(0, meterValue - 0.3);
-    if (begFill) begFill.style.width = meterValue + "%";
-    if (begLabel) begLabel.textContent = Math.floor(meterValue) + "%";
-  } else if (mode === "tease"){
-    if (rms > 0.03){
-      meterValue += 3 + Math.random()*3;
-      if (meterValue >= scenes[currentSceneIndex].goal){
-        if (fillEl) fillEl.style.width = "100%";
-        if (fillLabel) fillLabel.textContent = "100%";
-        completeTeaseScene();
-        return;
-      }
-      try { chime.currentTime = 0; chime.play().catch(()=>{}); } catch(e){}
-    } else meterValue = Math.max(0, meterValue - 0.5);
-    if (fillEl) fillEl.style.width = (meterValue / scenes[currentSceneIndex].goal * 100) + "%";
-    if (fillLabel) fillLabel.textContent = Math.floor((meterValue / scenes[currentSceneIndex].goal) * 100) + "%";
+  begFill.style.width = meterValue + "%";
+  begLabel.textContent = Math.floor(meterValue) + "%";
+
+  begCtx = waveform.getContext("2d");
+  begCtx.clearRect(0,0,waveform.width,waveform.height);
+  begCtx.beginPath();
+  var amp = Math.min(rms * 80, waveform.height/2);
+  for (var x=0; x<waveform.width; x++){
+    var y = waveform.height/2 + Math.sin(x/30) * amp;
+    if (x===0) begCtx.moveTo(x,y); else begCtx.lineTo(x,y);
   }
+  begCtx.strokeStyle = "#ff69b4";
+  begCtx.lineWidth = 2;
+  begCtx.stroke();
 
   requestAnimationFrame(draw);
 }
-
-function drawWave(ctx, canvas, rms){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.beginPath();
-  const amp = Math.min(rms * 80, canvas.height/2);
-  for (let x=0; x<canvas.width; x++){
-    const y = canvas.height/2 + Math.sin((x/30) + wavePhase) * amp;
-    x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-  }
-  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--pink2');
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  wavePhase += 0.05;
-}
-
-/* --------------------------
-   Flow (Enter + Start)
---------------------------- */
-enterBtn.addEventListener("click", () => {
-  try { enterSound.currentTime = 0; enterSound.play(); } catch(e){}
-  enterScreen.classList.add("fade-out");
-  setTimeout(() => {
-    document.body.style.backgroundColor = "var(--bg)";
-    startScreen.classList.add("show");
-    setTimeout(playRandomStartSound, 2000);
-  }, 3000);
-});
-
-function playRandomStartSound(){
-  const i = Math.floor(Math.random() * 5) + 1;
-  const s = new Audio(`audio/Start${i}.mp3`);
-  s.play().catch(()=>{});
-}
-
-beginBtn.addEventListener("click", () => {
-  startScreen.classList.remove("show");
-  setTimeout(() => startBeggingScene(0), 500);
-});
-
-/* --------------------------
-   Scene Functions (Begging, Teasing, Break, BegCum, Cum)
---------------------------- */
-
-/* Begging */
-function startBeggingScene(index){
-  beggingIndex = index;
-  mode = "beg";
-  meterValue = 0;
-  beggingText.innerHTML = beggingScenes[index];
-
-  // waveform
-  let wf = document.createElement("canvas");
-  wf.id = "waveform";
-  wf.width = 400;
-  wf.height = 30;
-  wf.className = "waveform component-frame fade";
-  beggingScreen.appendChild(wf);
-  begCanvas = wf;
-  begCtx = wf.getContext("2d");
-  setTimeout(()=> wf.classList.add("show"), 10);
-
-  // bar
-  let bar = document.createElement("div");
-  bar.className = "meter component-frame fade";
-  bar.innerHTML = '<div class="meter-fill" id="begFill"></div><div class="meter-label" id="begLabel">0%</div>';
-  beggingScreen.appendChild(bar);
-  setTimeout(()=> bar.classList.add("show"), 10);
-
-  begFill = document.getElementById("begFill");
-  begLabel = document.getElementById("begLabel");
-  begFill.style.width = "0%";
-  if (begLabel) begLabel.textContent = "0%";
-
-  beggingScreen.classList.add("show");
-  stopMic(); startMic();
-}
-
-function completeBeggingStep(){
-  stopMic();
-  beggingScreen.classList.remove("show");
-
-  const oldWf = beggingScreen.querySelector("#waveform");
-  if (oldWf){ oldWf.classList.remove("show"); setTimeout(()=> oldWf.remove(), 400); }
-  const oldBar = beggingScreen.querySelector(".meter");
-  if (oldBar){ oldBar.classList.remove("show"); setTimeout(()=> oldBar.remove(), 400); }
-
-  showPopup("Good Girl.<br>You've earned what's next!", () => {
-    if (beggingIndex < beggingScenes.length - 1){
-      startBeggingScene(beggingIndex + 1);
-    } else startTeaseScene(0);
-  });
-}
-
-/* Teasing */
-function startTeaseScene(index){
-  currentSceneIndex = index;
-  const s = scenes[index];
-  if (s.title.includes("Gentle Break")) return startGentleBreak();
-  mode = "tease";
-  meterValue = 0;
-
-  sceneTitle.textContent = s.title;
-  line1.textContent = s.lines[0] || "";
-  line2.textContent = s.lines[1] || "";
-  line3.textContent = s.lines[2] || "";
-
-  // waveform
-  let wf = document.createElement("canvas");
-  wf.id = "waveform-main";
-  wf.width = 400;
-  wf.height = 30;
-  wf.className = "waveform component-frame fade";
-  document.querySelector("main .card").appendChild(wf);
-  mainCanvas = wf;
-  mainCtx = wf.getContext("2d");
-  setTimeout(()=> wf.classList.add("show"), 10);
-
-  // bar
-  let bar = document.createElement("div");
-  bar.className = "meter component-frame fade";
-  bar.innerHTML = '<div class="meter-fill" id="fill"></div><div class="meter-label" id="fillLabel">0%</div>';
-  document.querySelector("main .card").appendChild(bar);
-  setTimeout(()=> bar.classList.add("show"), 10);
-
-  fillEl = document.getElementById("fill");
-  fillLabel = document.getElementById("fillLabel");
-  fillEl.style.width = "0%";
-  if (fillLabel) fillLabel.textContent = "0%";
-
-  stopMic(); startMic();
-}
-
-function completeTeaseScene(){
-  stopMic();
-
-  const oldWf = document.querySelector("main .card #waveform-main");
-  if (oldWf){ oldWf.classList.remove("show"); setTimeout(()=> oldWf.remove(), 400); }
-  const oldBar = document.querySelector("main .card .meter");
-  if (oldBar){ oldBar.classList.remove("show"); setTimeout(()=> oldBar.remove(), 400); }
-
-  if (currentSceneIndex === scenes.length - 1) {
-    startBegForCum();
-  } else {
-    showPopup("Good Girl! You've pleased him well.", () => {
-      transitionTo(() => startTeaseScene(currentSceneIndex + 1));
-    });
-  }
-}
-
-/* Gentle Break */
-function startGentleBreak(){
-  mode = "break";
-  stopMic();
-  breakScreen.style.display = "flex";
-
-  let bar = document.createElement("div");
-  bar.className = "meter component-frame fade";
-  bar.innerHTML = '<div class="meter-fill" id="breakFill"></div><div class="meter-label" id="breakLabel">0%</div>';
-  breakScreen.appendChild(bar);
-  setTimeout(()=> bar.classList.add("show"), 10);
-
-  breakFill = document.getElementById("breakFill");
-  breakLabel = document.getElementById("breakLabel");
-  meterValue = 0;
-  if (breakFill) breakFill.style.width = "0%";
-  if (breakLabel) breakLabel.textContent = "0%";
-  
-  const duration = Math.floor(Math.random()*10) + 10;
-  const step = 100 / (duration * 60);
-
-  function tick(){
-    if (mode !== "break") return;
-    meterValue += step;
-    if (breakFill) breakFill.style.width = meterValue + "%";
-    if (breakLabel) breakLabel.textContent = Math.floor(meterValue) + "%";
-
-    if (meterValue >= 100){
-      const oldBar = breakScreen.querySelector(".meter");
-      if (oldBar){ oldBar.classList.remove("show"); setTimeout(()=> oldBar.remove(), 400); }
-
-      breakScreen.style.display = "none";
-      showPopup("Enough resting.<br>Get back to that cock!", () => {
-        transitionTo(() => startTeaseScene(currentSceneIndex + 1));
-      });
-    } else requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
-
-/* Beg for Cum */
-function startBegForCum(){
-  mode = "begCum";
-  meterValue = 0;
-
-  let wf = document.createElement("canvas");
-  wf.id = "waveform";
-  wf.width = 400;
-  wf.height = 30;
-  wf.className = "waveform component-frame fade";
-  beggingScreen.appendChild(wf);
-  begCanvas = wf;
-  begCtx = wf.getContext("2d");
-  setTimeout(()=> wf.classList.add("show"), 10);
-
-  let bar = document.createElement("div");
-  bar.className = "meter component-frame fade";
-  bar.innerHTML = '<div class="meter-fill" id="begFill"></div><div class="meter-label" id="begLabel">0%</div>';
-  beggingScreen.appendChild(bar);
-  setTimeout(()=> bar.classList.add("show"), 10);
-
-  begFill = document.getElementById("begFill");
-  begLabel = document.getElementById("begLabel");
-  if (begFill) begFill.style.width = "0%";
-  if (begLabel) begLabel.textContent = "0%";
-
-  beggingText.innerHTML = begForCumScene;
-  beggingScreen.classList.add("show");
-  stopMic(); startMic();
-}
-
-function completeBegForCum(){
-  stopMic();
-  beggingScreen.classList.remove("show");
-
-  const oldWf = beggingScreen.querySelector("#waveform");
-  if (oldWf){ oldWf.classList.remove("show"); setTimeout(()=> oldWf.remove(), 400); }
-  const oldBar = beggingScreen.querySelector(".meter");
-  if (oldBar){ oldBar.classList.remove("show"); setTimeout(()=> oldBar.remove(), 400); }
-
-  showPopup("Good Girl.<br>You've earned his release.", startCumScene);
-}
-
-/* Cum Scene */
-function startCumScene(){
-  mode = "cum"; stopMic();
-  cumScreen.style.display = "flex";
-
-  let bar = document.createElement("div");
-  bar.className = "meter component-frame fade";
-  bar.id = "cumMeter";
-  bar.innerHTML = '<div class="meter-fill" id="cumFill"></div><div class="meter-label" id="cumLabel">0%</div>';
-  cumScreen.insertBefore(bar, heartsContainer);
-  setTimeout(()=> bar.classList.add("show"), 10);
-
-  cumFill = document.getElementById("cumFill");
-  cumLabel = document.getElementById("cumLabel");
-  let meterVal = 0;
-  if (cumFill) cumFill.style.width = "0%";
-  if (cumLabel) cumLabel.textContent = "0%";
-
-  const duration = Math.floor(Math.random()*11) + 5;
-  const step = 100 / (duration * 60);
-
-  function fill(){
-    if (meterVal >= 90){
-      const spurts = Math.floor(Math.random()*3) + 3;
-      let i = 0; const remaining = 100 - meterVal;
-      const perSpurt = remaining / spurts;
-      function spurt(){
-        if (i < spurts){
-          meterVal = Math.min(100, meterVal + perSpurt);
-          if (cumFill) cumFill.style.width = meterVal + "%";
-          if (cumLabel) cumLabel.textContent = Math.floor(meterVal) + "%";
-          i++;
-          setTimeout(spurt, 150);
-        } else {
-          cumMeter.classList.add("shake");
-          setTimeout(()=>{
-            cumMeter.classList.remove("shake");
-            triggerHeartsThenPopup();
-          }, 300);
-        }
-      }
-      spurt();
-    } else {
-      meterVal += step;
-      if (cumFill) cumFill.style.width = meterVal + "%";
-      if (cumLabel) cumLabel.textContent = Math.floor(meterVal) + "%";
-      if (meterVal < 90) requestAnimationFrame(fill);
-      else fill();
-    }
-  }
-  requestAnimationFrame(fill);
-}
-
-function triggerHeartsThenPopup(){
-  if (cumFill) cumFill.style.background = "#fff";
-  setTimeout(()=>{ if (cumFill) cumFill.style.background = "var(--pink1)"; }, 150);
-
-  const hearts = Math.floor(Math.random()*3) + 5;
-  for (let i=0;i<hearts;i++){
-    setTimeout(()=>{
-      spawnHeart();
-      try { popSound.currentTime = 0; popSound.play().catch(()=>{}); } catch(e){}
-    }, i*100);
-  }
-
-  setTimeout(()=>{
-    const ending = cumEndings[Math.floor(Math.random()*cumEndings.length)];
-    const oldBar = cumScreen.querySelector(".meter");
-    if (oldBar){ oldBar.classList.remove("show"); setTimeout(()=> oldBar.remove(), 400); }
-
-    showPopup(ending, ()=>console.log("Round complete"));
-  }, hearts*120 + 500);
-}
-
-/* Hearts */
-function spawnHeart(){
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "ðŸ©·";
-  heart.style.left = (Math.random()*120 - 60) + "px";
-  heart.style.top  = "0px";
-  heartsContainer.appendChild(heart);
-  setTimeout(()=>heart.remove(), 650);
-}
-
-/* Prevent double-tap zoom & context menu */
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function(event) {
-  const now = Date.now();
-  if (now - lastTouchEnd <= 300) event.preventDefault();
-  lastTouchEnd = now;
-}, false);
-document.addEventListener('contextmenu', e => e.preventDefault());
 </script>
 </body>
 </html>

@@ -259,14 +259,26 @@ function draw(){
 
   begCtx = waveform.getContext("2d");
   begCtx.clearRect(0,0,waveform.width,waveform.height);
+
+  // main hot pink wave
   begCtx.beginPath();
   var amp = Math.min(rms * 80, waveform.height/2);
   for (var x=0; x<waveform.width; x++){
     var y = waveform.height/2 + Math.sin(x/30) * amp;
     if (x===0) begCtx.moveTo(x,y); else begCtx.lineTo(x,y);
   }
-  begCtx.strokeStyle = "#ff69b4";
+  begCtx.strokeStyle = "#ff69b4"; // hot pink
   begCtx.lineWidth = 2;
+  begCtx.stroke();
+
+  // softer pastel echo wave (slight vertical offset)
+  begCtx.beginPath();
+  for (var x=0; x<waveform.width; x++){
+    var y = waveform.height/2 + 5 + Math.sin(x/30) * amp * 0.8;
+    if (x===0) begCtx.moveTo(x,y); else begCtx.lineTo(x,y);
+  }
+  begCtx.strokeStyle = "#ffb6c1"; // pastel pink
+  begCtx.lineWidth = 1.5;
   begCtx.stroke();
 
   requestAnimationFrame(draw);

@@ -22,9 +22,28 @@
   #begging-screen.show { opacity:1; }
   .component-frame { width:80%; max-width:400px; border:2px solid var(--pink1); border-radius:12px; background:var(--bg); margin:12px auto; opacity:0; transition:opacity 1s; }
   .component-frame.show { opacity:1; }
-  .meter { height:20px; position:relative; }
-  .meter-fill { height:100%; width:0%; background:var(--pink1); border-right:2px solid var(--pink2); transition:width .1s linear; }
-  .meter-label { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:12px; font-weight:bold; color:var(--pink2); pointer-events:none; }
+  .meter {
+  height: 20px;
+  position: relative;
+  border-radius: 12px;        /* round the frame */
+  overflow: hidden;           /* keeps fill inside curve */
+  }
+  .meter-fill {
+  height: 100%; width: 0%;
+  background: var(--pink1);
+  border-right: 2px solid var(--pink2);
+  transition: width .1s linear;
+  border-radius: 12px 0 0 12px; /* round left side of fill */
+  }
+  .meter-label {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--pink2);
+  pointer-events: none;
+  }
   .waveform { height:30px; display:block; }
   /* Feminine button styling */
   .fem-btn {
@@ -42,6 +61,24 @@
   }
   .fem-btn:hover {
     background: #e0559a;
+    transform: scale(1.05);
+  }
+  /* Universal Feminine Button (except enter) */
+  button:not(#enterBtn) {
+    background: #ffb6c1;       /* pastel pink */
+    color: #880044;            /* berry text */
+    border: none;
+    font-size: 1rem;
+    padding: 12px 28px;
+    border-radius: 32px;       /* pill shape */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s, color 0.3s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  button:not(#enterBtn):hover {
+    background: #ff69b4;       /* hot pink hover */
+    color: white;
     transform: scale(1.05);
   }
 </style>

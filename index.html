@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <title>T.R.O.A.T. Training Repetitive Oral Attention Techniques</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #fff0f5;
@@ -11,7 +12,12 @@
     --pink2: #ff69b4;
     --accent: #880044;
   }
-  body { margin:0; background:var(--bg); font-family:system-ui,sans-serif; color:var(--accent); }
+  body {
+  margin: 0;
+  background: var(--bg);
+  font-family: 'Poppins', sans-serif; /* universal font */
+  color: var(--accent);
+  }
   .screen { position:fixed; inset:0; display:none; flex-direction:column; align-items:center; justify-content:flex-start; text-align:center; padding:20px; transition:opacity 1s; }
   .screen.show { display:flex; }
   #enter-screen { background:white; z-index:50; align-items:center; justify-content:center; text-align:center; opacity:1; transition:opacity 3s; }
@@ -100,11 +106,11 @@
 
 <!-- START SCREEN -->
 <div id="start-screen" class="screen">
-  <main style="padding:20px; width:100%; max-width:720px; margin:0 auto; text-align:center;">
-    <h1 style="margin-top:20px;"><b>🩷 T.R.O.A.T. 🩷</b></h1>
+  <div style="margin-top:20px; text-align:center; width:100%;">
+    <h1><b>🩷 T.R.O.A.T. 🩷</b></h1>
     <p style="font-weight:bold;">Training Repetitive Oral Attention Techniques</p>
     <button id="begin-btn" class="fem-btn">Begin Training</button>
-  </main>
+  </div>
 </div>
 
 <!-- BEGGING SCREEN -->

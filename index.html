@@ -133,11 +133,20 @@ var readyClips = [
   "audio/ReadyToServe3.mp3"
 ];
 
+var sayCockClips = [
+  "audio/SayCock1.mp3",
+  "audio/SayCock2.mp3",
+  "audio/SayCock3.mp3",
+  "audio/SayCock4.mp3",
+  "audio/SayCock5.mp3"
+];
+
 /* --------------------------
    State
 --------------------------- */
 var meterValue = 0;
 var running = false;
+var mode = "";
 var audioCtx, analyser, micSource, dataArray;
 var begFill, begLabel, begCtx;
 
@@ -162,7 +171,7 @@ const startSounds = [
 ];
 
 /* --------------------------
-   Enter + Intro (canon logic)
+   Enter + Intro
 --------------------------- */
 enterBtn.addEventListener("click", () => {
   try { enterClick.currentTime = 0; enterClick.play().catch(()=>{}); } catch(e){}
@@ -183,6 +192,8 @@ enterBtn.addEventListener("click", () => {
    Begin Training → Scene 1
 --------------------------- */
 beginBtn.addEventListener("click", function(){
+  mode = ""; 
+  meterValue = 0; // reset meter
   startScreen.style.display = "none";
   setTimeout(function(){
     beggingScreen.classList.add("show");
@@ -218,6 +229,44 @@ beginBtn.addEventListener("click", function(){
     });
   }, 500);
 });
+
+/* --------------------------
+   Crave Scene (second begging)
+--------------------------- */
+function startCraveScene(){
+  mode = ""; 
+  meterValue = 0; // reset meter
+
+  beggingText.innerHTML =
+    '<div id="goodGirlText" style="opacity:0; transition:opacity 1s; font-size:1.5rem; margin-bottom:16px;">Good girl.</div>' +
+    '<div id="craveText" style="opacity:0; transition:opacity 1s; font-size:1.5rem; margin-bottom:20px;">What do you crave?</div>';
+
+  var goodGirlEl = document.getElementById("goodGirlText");
+  var craveEl = document.getElementById("craveText");
+
+  // "Good girl." first
+  setTimeout(() => { goodGirlEl.style.opacity = 1; }, 100);
+  setTimeout(() => { goodGirlEl.style.opacity = 0; }, 3000);
+
+  // play random SayCock audio while no text is shown
+  var fileS = sayCockClips[Math.floor(Math.random() * sayCockClips.length)];
+  var audioElS = new Audio(fileS);
+  audioElS.play().catch(()=>{});
+
+  // after audio ends: show "What do you crave?" + mic + meter
+  audioElS.addEventListener("ended", function(){
+    craveEl.style.opacity = 1;
+    setTimeout(function(){
+      waveform.classList.add("show");
+      document.querySelector("#begging-screen .meter").classList.add("show");
+      begFill = document.getElementById("begFill");
+      begLabel = document.getElementById("begLabel");
+      begFill.style.width = "0%";
+      begLabel.textContent = "0%";
+      startMic();
+    }, 2000);
+  });
+}
 
 /* --------------------------
    Mic + Waveform
@@ -262,6 +311,21 @@ function draw(){
 
   begFill.style.width = meterValue + "%";
   begLabel.textContent = Math.floor(meterValue) + "%";
+
+  // when meter full, fade out text + waveform + meter together
+  if (meterValue >= 100 && mode !== "craveDone"){
+    mode = "craveDone";
+    stopMic();
+
+    waveform.classList.remove("show");
+    document.querySelector("#begging-screen .meter").classList.remove("show");
+    Array.from(beggingText.children).forEach(el => el.style.opacity = 0);
+
+    setTimeout(() => {
+      beggingText.innerHTML = "";
+      startCraveScene();
+    }, 1000);
+  }
 
   begCtx = waveform.getContext("2d");
   begCtx.clearRect(0,0,waveform.width,waveform.height);
